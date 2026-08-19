@@ -1,0 +1,29 @@
+.sidebar {
+  width: 285px;
+  flex-shrink: 0;
+}
+
+.sidebar-item {
+  width: 100%;
+  min-height: 58px;
+  padding: 10px 22px;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+  color: #444;
+}
+
+.sidebar-item:hover,
+.sidebar-item.active {
+  background: #f3f8fd;
+}
+
+.sidebar-item .icon {
+  width: 25px;
+  text-align: center;
+  font-size: 21px;
+  color: #075fa5;
+}

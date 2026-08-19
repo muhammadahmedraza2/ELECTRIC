@@ -1,0 +1,52 @@
+<div class="sidebar bg-white border-end vh-100">
+
+  @for (node of menuNodes; track node.name) {
+
+    <div class="menu-node">
+
+      <button
+        type="button"
+        class="sidebar-item btn w-100 border-0 rounded-0 d-flex align-items-center"
+        [class.active]="openMenu === node.name"
+        (click)="node.children?.length ? toggleMenu(node.name) : selectNode(node)"
+      >
+
+        <span class="sidebar-icon">{{ node.icon }}</span>
+
+        <span class="sidebar-name flex-grow-1">
+          {{ node.name }}
+        </span>
+
+        @if (node.children?.length) {
+          <span class="arrow">
+            {{ openMenu === node.name ? '⌃' : '⌄' }}
+          </span>
+        }
+
+      </button>
+
+      @if (node.children?.length && openMenu === node.name) {
+
+        <div class="child-menu">
+
+          @for (child of node.children; track child.name) {
+
+            <button
+              type="button"
+              class="child-item btn w-100 border-0 text-start"
+              (click)="selectNode(child)"
+            >
+              {{ child.name }}
+            </button>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</div>
