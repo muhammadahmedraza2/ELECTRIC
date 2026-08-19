@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { INVENTORY_CATEGORIES, InventoryItem } from '../../../Interfaces/InventoryItem';
-// import { INVENTORY_CATEGORIES, InventoryItem } from '../../models/inventory-item.model';
+import { Component, EventEmitter, Output } from '@angular/core';
+
+export interface MenuNode {
+  name: string;
+  icon?: string;
+  route?: string;
+  children?: MenuNode[];
+}
 
 @Component({
   selector: 'app-inventory-sidebar',
@@ -11,21 +16,81 @@ import { INVENTORY_CATEGORIES, InventoryItem } from '../../../Interfaces/Invento
   styleUrl: './sidebar.css'
 })
 export class Sidebar {
-  @Input() items: InventoryItem[] = [];
-  @Input() selectedCategory = '';
-  @Output() categorySelected = new EventEmitter<string>();
 
-  categories = INVENTORY_CATEGORIES;
+  @Output() nodeSelected = new EventEmitter<MenuNode>();
 
-  countFor(categoryName: string): number {
-    return this.items.filter(x => x.category === categoryName).length;
+  openMenu = '';
+
+  menuNodes: MenuNode[] = [
+
+    {
+      name: 'Home',
+      icon: '⌂',
+      route: '/home'
+    },
+
+    {
+      name: 'Resend Request',
+      icon: '📄',
+      children: [
+        { name: 'Resend Request', route: '/resend-request' },
+        { name: 'Pending Request', route: '/resend-request/pending' },
+        { name: 'Request Status', route: '/resend-request/status' }
+      ]
+    },
+
+    {
+      name: 'Instrument Processing',
+      icon: '💵',
+      children: [
+        { name: 'Instrument Printing', route: '/instrument-printing' },
+        { name: 'Instrument Processing', route: '/instrument-processing' },
+        { name: 'Instrument Status', route: '/instrument-status' }
+      ]
+    },
+
+    {
+      name: 'Account Statement',
+      icon: '▤',
+      children: [
+        { name: 'Account Statement', route: '/account-statement' },
+        { name: 'Account Balance', route: '/account-balance' }
+      ]
+    },
+
+    {
+      name: 'Payment Transaction',
+      icon: '💵',
+      children: [
+        { name: 'Create Transaction', route: '/payment/create' },
+        { name: 'Transaction Status', route: '/payment/status' },
+        { name: 'Bulk Transaction - Queue Base', route: '/payment/bulk' },
+        { name: 'Repair Transaction', route: '/payment/repair' }
+      ]
+    },
+
+    {
+      name: 'Help',
+      icon: '?',
+      children: [
+        { name: 'User Guide', route: '/help/guide' },
+        { name: 'About', route: '/help/about' }
+      ]
+    },
+
+    {
+      name: 'Logout',
+      icon: '⇥',
+      route: '/logout'
+    }
+
+  ];
+
+  toggleMenu(name: string): void {
+    this.openMenu = this.openMenu === name ? '' : name;
   }
 
-  get totalCount(): number {
-    return this.items.length;
-  }
-
-  select(categoryName: string): void {
-    this.categorySelected.emit(categoryName);
+  selectNode(node: MenuNode): void {
+    this.nodeSelected.emit(node);
   }
 }
