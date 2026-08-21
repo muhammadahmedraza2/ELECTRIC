@@ -1,0 +1,67 @@
+<h5 class="mb-3"><i class="bi bi-receipt me-1"></i> Sales History</h5>
+
+<div class="row g-3 mb-3">
+  <div class="col-md-4">
+    <div class="stat-card">
+      <div class="icon-wrap"><i class="bi bi-cash-stack"></i></div>
+      <div><h3>Rs {{ sales.totalRevenue() | number }}</h3><span>Total Revenue</span></div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card">
+      <div class="icon-wrap" style="background:#22b573"><i class="bi bi-bag-check"></i></div>
+      <div><h3>{{ sales.totalOrders() }}</h3><span>Total Orders</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card-surface" *ngIf="sales.sales().length; else noSales">
+  <div class="table-responsive">
+    <table class="table-app">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Date</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let sale of sales.sales()">
+          <tr (click)="toggle(sale.id)" style="cursor:pointer">
+            <td>#{{ sale.id }}</td>
+            <td>{{ sale.date | date:'medium' }}</td>
+            <td>{{ sale.lines.length }} item(s)</td>
+            <td>Rs {{ sale.total | number }}</td>
+            <td><i class="bi" [ngClass]="expandedId === sale.id ? 'bi-chevron-up' : 'bi-chevron-down'"></i></td>
+          </tr>
+          <tr *ngIf="expandedId === sale.id">
+            <td colspan="5">
+              <table class="table-app mb-0">
+                <thead>
+                  <tr><th>Item</th><th>Brand</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let line of sale.lines">
+                    <td>{{ line.name }}</td>
+                    <td>{{ line.brand }}</td>
+                    <td>{{ line.qty }}</td>
+                    <td>Rs {{ line.price | number }}</td>
+                    <td>Rs {{ line.qty * line.price | number }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #noSales>
+  <div class="card-surface text-center text-muted py-5">
+    No sales recorded yet. Complete a checkout from <b>POS</b> or <b>Cart</b>.
+  </div>
+</ng-template>

@@ -1,0 +1,70 @@
+<h5 class="mb-3">Settings & Privacy</h5>
+
+<div class="row g-3">
+
+  <!-- Theme -->
+  <div class="col-md-6">
+    <div class="card-surface form-app">
+      <label>App Theme</label>
+      <div class="d-flex gap-3 mb-2">
+        <span *ngFor="let t of themes"
+              class="theme-swatch"
+              [class.active]="theme.theme() === t.key"
+              [style.background]="t.color"
+              [title]="t.label"
+              (click)="selectTheme(t.key)">
+        </span>
+      </div>
+      <small class="text-muted">Current: {{ theme.theme() }}</small>
+    </div>
+  </div>
+
+  <!-- Font -->
+  <div class="col-md-6">
+    <div class="card-surface form-app">
+      <label>App Font</label>
+      <select (change)="selectFont($event)">
+        <option *ngFor="let f of fonts" [value]="f.key" [selected]="theme.font() === f.key">
+          {{ f.label }}
+        </option>
+      </select>
+      <small class="text-muted d-block mt-2">Applies instantly, across the whole app.</small>
+    </div>
+  </div>
+
+  <!-- Privacy -->
+  <div class="col-12">
+    <div class="card-surface form-app">
+      <label class="mb-3">Privacy Settings</label>
+
+      <div class="form-check form-switch mb-2">
+        <input class="form-check-input" type="checkbox" id="usage"
+               [checked]="theme.privacy().shareUsageData"
+               (change)="theme.updatePrivacy('shareUsageData', !theme.privacy().shareUsageData)">
+        <label class="form-check-label" for="usage">Share anonymous usage data</label>
+      </div>
+
+      <div class="form-check form-switch mb-2">
+        <input class="form-check-input" type="checkbox" id="email"
+               [checked]="theme.privacy().emailNotifications"
+               (change)="theme.updatePrivacy('emailNotifications', !theme.privacy().emailNotifications)">
+        <label class="form-check-label" for="email">Email notifications</label>
+      </div>
+
+      <div class="form-check form-switch mb-2">
+        <input class="form-check-input" type="checkbox" id="2fa"
+               [checked]="theme.privacy().twoFactorAuth"
+               (change)="theme.updatePrivacy('twoFactorAuth', !theme.privacy().twoFactorAuth)">
+        <label class="form-check-label" for="2fa">Two-factor authentication</label>
+      </div>
+
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="public"
+               [checked]="theme.privacy().publicProfile"
+               (change)="theme.updatePrivacy('publicProfile', !theme.privacy().publicProfile)">
+        <label class="form-check-label" for="public">Make profile public</label>
+      </div>
+    </div>
+  </div>
+
+</div>

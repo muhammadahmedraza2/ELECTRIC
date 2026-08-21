@@ -1,0 +1,52 @@
+<h5 class="mb-3"><i class="bi bi-cart3 me-1"></i> My Cart</h5>
+
+<div class="card-surface" *ngIf="cart.cartLines().length; else emptyCart">
+  <div class="table-responsive">
+    <table class="table-app">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Subtotal</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of cart.cartLines()">
+          <td>{{ line.item.name }}</td>
+          <td>{{ line.item.category }}</td>
+          <td>Rs {{ line.item.price | number }}</td>
+          <td>
+            <div class="qty-stepper">
+              <button (click)="cart.updateQty(line.item.id, line.qty - 1)">-</button>
+              <span>{{ line.qty }}</span>
+              <button (click)="cart.updateQty(line.item.id, line.qty + 1)">+</button>
+            </div>
+          </td>
+          <td>Rs {{ line.qty * line.item.price | number }}</td>
+          <td>
+            <button class="btn-icon-danger" (click)="cart.removeFromCart(line.item.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-end align-items-center gap-3 mt-3">
+    <h5 class="mb-0">Total: Rs {{ cart.cartTotal() | number }}</h5>
+    <button class="btn-app-outline btn" (click)="cart.clearCart()">Clear Cart</button>
+    <button class="btn-app-primary btn" (click)="checkout()">
+      <i class="bi bi-check2-circle me-1"></i> Checkout
+    </button>
+  </div>
+</div>
+
+<ng-template #emptyCart>
+  <div class="card-surface text-center text-muted py-5">
+    Your cart is empty. Go to <b>POS</b> to add items.
+  </div>
+</ng-template>
