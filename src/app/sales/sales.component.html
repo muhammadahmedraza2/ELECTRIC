@@ -1,67 +1,103 @@
-<h5 class="mb-3"><i class="bi bi-receipt me-1"></i> Sales History</h5>
-
-<div class="row g-3 mb-3">
-  <div class="col-md-4">
-    <div class="stat-card">
-      <div class="icon-wrap"><i class="bi bi-cash-stack"></i></div>
-      <div><h3>Rs {{ sales.totalRevenue() | number }}</h3><span>Total Revenue</span></div>
-    </div>
+<div class="nk-sidebar-element nk-sidebar-head nk-sidebar-child">
+  <div class="nk-sidebar-brand">
+    <a href="javascript:void(0)" class="logo-link nk-sidebar-logo" (click)="btn_home()">
+      <img class="logo-light logo-img" src="assets/icon/BankLogo.svg" alt="logo">
+      <img class="logo-dark logo-img" src="assets/icon/BankLogo.svg" srcset="assets/icon/BankLogo.svg" alt="logo-dark">
+    </a>
   </div>
-  <div class="col-md-4">
-    <div class="stat-card">
-      <div class="icon-wrap" style="background:#22b573"><i class="bi bi-bag-check"></i></div>
-      <div><h3>{{ sales.totalOrders() }}</h3><span>Total Orders</span></div>
-    </div>
+  <div class="nk-menu-trigger nk-menu-trigger-child mr-n2">
+    <a href="javascript:void(0)" class="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu">
+      <em class="icon ni ni-cross text-white"></em>
+    </a>
   </div>
 </div>
 
-<div class="card-surface" *ngIf="sales.sales().length; else noSales">
-  <div class="table-responsive">
-    <table class="table-app">
-      <thead>
-        <tr>
-          <th>Order #</th>
-          <th>Date</th>
-          <th>Items</th>
-          <th>Total</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let sale of sales.sales()">
-          <tr (click)="toggle(sale.id)" style="cursor:pointer">
-            <td>#{{ sale.id }}</td>
-            <td>{{ sale.date | date:'medium' }}</td>
-            <td>{{ sale.lines.length }} item(s)</td>
-            <td>Rs {{ sale.total | number }}</td>
-            <td><i class="bi" [ngClass]="expandedId === sale.id ? 'bi-chevron-up' : 'bi-chevron-down'"></i></td>
-          </tr>
-          <tr *ngIf="expandedId === sale.id">
-            <td colspan="5">
-              <table class="table-app mb-0">
-                <thead>
-                  <tr><th>Item</th><th>Brand</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let line of sale.lines">
-                    <td>{{ line.name }}</td>
-                    <td>{{ line.brand }}</td>
-                    <td>{{ line.qty }}</td>
-                    <td>Rs {{ line.price | number }}</td>
-                    <td>Rs {{ line.qty * line.price | number }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
+<div class="nk-sidebar-element">
+  <ul class="pt-2">
+    <li class="nk-menu-item pb-1">
+      <div class="nk-chat-aside-search m-0 pl-3 pr-2">
+        <div class="form-group">
+          <div class="form-control-wrap">
+            <div class="form-icon form-icon-left"><em class="icon ni ni-search"></em></div>
+            <input type="text" placeholder="Search by Interface" class="sidebar-search form-control bg-transparent"
+              style="border: none !important; border-bottom: 1px solid #074888 !important; border-radius: 0 !important;"
+              (input)="onSearch($any($event.target).value)" />
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <div class="nk-sidebar-content" style="overflow:hidden scroll;">
+    <div class="nk-sidebar-menu" data-simplebar>
+      <ul class="nk-menu">
+
+        <!-- Home -->
+        <li class="nk-menu-item">
+          <a href="javascript:void(0)" class="nk-menu-link" (click)="btn_home()">
+            <span class="nk-menu-icon"><img src="assets/icon/sideBar-Home.svg" /></span>
+            <span class="nk-menu-text">Home</span>
+          </a>
+        </li>
+
+
+        <!-- Dynamic menu items from API -->
+        @for (item of menu(); track $index) {
+        <li class="nk-menu-item has-sub" [class.active]="openMenu() === item.id">
+          <a href="javascript:void(0)" class="nk-menu-link nk-menu-toggle" (click)="toggleSubMenu(item.id)">
+            <span class="nk-menu-icon"><img [src]="'assets/icon/' + item.icon" /></span>
+            <span class="nk-menu-text">{{ item.Node }}</span>
+          </a>
+
+          @if (openMenu() === item.id) {
+          <ul class="nk-menu-sub" style="display: block;">
+            @for (frm of item.Forms; track frm.FORM_ID) {
+            <li class="nk-menu-item" [class.active]="selectedFormId() === frm.FORM_ID">
+              <a (click)="Goto($event, frm.SITE, frm.FORM_ID, frm)" class="nk-menu-link">
+                <span class="nk-menu-text">{{ frm.FORM_TITLE }}</span>
+              </a>
+            </li>
+            }
+          </ul>
+          }
+        </li>
+        }
+
+     
+        <li class="nk-menu-item has-sub" [class.active]="isHelpOpen()">
+          <a href="javascript:void(0)" class="nk-menu-link nk-menu-toggle" (click)="toggleHelp()">
+            <span class="nk-menu-icon"><img src="assets/icon/help.svg" /></span>
+            <span class="nk-menu-text">Help</span>
+          </a>
+
+          <ul class="nk-menu-sub" [style.display]="isHelpOpen() ? 'block' : 'none'">
+            @if (ViewComp) {
+            <li class="nk-menu-item">
+              <a href="javascript:void(0)" (click)="viewTick_click()" class="nk-menu-link">
+                <span class="nk-menu-text">View Tickets</span>
+              </a>
+            </li>
+            }
+            @if (CreateComp) {
+            <li class="nk-menu-item">
+              <a href="javascript:void(0)" (click)="newTick_click()" class="nk-menu-link">
+                <span class="nk-menu-text">Create Ticket</span>
+              </a>
+            </li>
+            }
+          </ul>
+        </li>
+
+
+        <!-- Logout -->
+        <li class="nk-menu-item">
+          <a href="javascript:void(0)" class="nk-menu-link" (click)="onLogout()">
+            <span class="nk-menu-icon"><img src="assets/icon/sideBar-logout.svg" /></span>
+            <span class="nk-menu-text">Logout</span>
+          </a>
+        </li>
+
+      </ul>
+    </div>
   </div>
 </div>
-
-<ng-template #noSales>
-  <div class="card-surface text-center text-muted py-5">
-    No sales recorded yet. Complete a checkout from <b>POS</b> or <b>Cart</b>.
-  </div>
-</ng-template>
