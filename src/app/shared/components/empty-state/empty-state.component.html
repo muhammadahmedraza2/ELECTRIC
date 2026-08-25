@@ -1,0 +1,5 @@
+<div class="state-box">
+  <i class="bi state-icon" [ngClass]="[icon, isError ? 'text-danger' : 'text-muted']"></i>
+  <h6>{{ title }}</h6>
+  <p class="text-muted mb-0" *ngIf="message">{{ message }}</p>
+</div>

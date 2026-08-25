@@ -1,0 +1,55 @@
+<app-loading *ngIf="loading" message="Loading data..."></app-loading>
+
+<div *ngIf="!loading">
+  <div class="shop-toolbar" *ngIf="showSearch">
+    <input type="text" class="toolbar-input" placeholder="Search..." [(ngModel)]="searchTerm" (ngModelChange)="currentPage.set(1)">
+    <span class="text-muted small">{{ filteredRows().length }} record(s)</span>
+  </div>
+
+  <div class="card-surface p-0" *ngIf="pagedRows().length; else emptyGrid">
+    <div class="table-responsive">
+      <table class="table-app">
+        <thead>
+          <tr>
+            <th *ngFor="let col of columns" [class.sortable-th]="col.sortable" (click)="sortBy(col)">
+              {{ col.label }}
+              <i class="bi" *ngIf="col.sortable" [ngClass]="sortField() === col.field ? (sortAsc() ? 'bi-caret-up-fill' : 'bi-caret-down-fill') : 'bi-caret-up'"></i>
+            </th>
+            <th *ngIf="showActions"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of pagedRows()">
+            <td *ngFor="let col of columns">
+              <span *ngIf="col.type === 'status'" class="badge-status"
+                    [ngClass]="{
+                      'badge-instock': cellValue(row, col) === 'In Stock' || cellValue(row, col) === 'Delivered',
+                      'badge-low': cellValue(row, col) === 'Low Stock' || cellValue(row, col) === 'Processing' || cellValue(row, col) === 'Shipped',
+                      'badge-out': cellValue(row, col) === 'Out of Stock' || cellValue(row, col) === 'Cancelled' || cellValue(row, col) === 'Pending'
+                    }">{{ cellValue(row, col) }}</span>
+              <span *ngIf="col.type === 'currency'">Rs {{ +cellValue(row, col)! | number }}</span>
+              <span *ngIf="!col.type || col.type === 'text' || col.type === 'number' || col.type === 'date'">{{ cellValue(row, col) }}</span>
+            </td>
+            <td *ngIf="showActions" class="d-flex gap-2">
+              <button class="btn-icon-plain" (click)="view.emit(row)"><i class="bi bi-eye"></i></button>
+              <button class="btn-icon-plain" (click)="edit.emit(row)"><i class="bi bi-pencil"></i></button>
+              <button class="btn-icon-danger" (click)="delete.emit(row)"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <ng-template #emptyGrid>
+    <app-empty-state icon="bi-table" title="No records found" [message]="emptyMessage"></app-empty-state>
+  </ng-template>
+
+  <app-pagination
+    [totalItems]="filteredRows().length"
+    [pageSize]="pageSize()"
+    [currentPage]="currentPage()"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
+  </app-pagination>
+</div>

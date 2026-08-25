@@ -1,0 +1,54 @@
+<aside class="app-sidebar" [class.compact]="theme.theme().sidebarMode === 'compact'">
+
+  <div class="sidebar-brand">
+    <div class="brand-logo"><i class="bi bi-lightning-charge-fill"></i></div>
+    <div class="brand-text">
+      <strong>ElectroStore</strong>
+      <small>Enterprise Console</small>
+    </div>
+  </div>
+
+  <div class="sidebar-search">
+    <i class="bi bi-search"></i>
+    <input type="text" placeholder="Search by Interface" [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}">
+  </div>
+
+  <nav class="sidebar-nav">
+    <ng-container *ngTemplateOutlet="nodeList; context: { $implicit: filteredMenu(), depth: 0 }"></ng-container>
+  </nav>
+
+  <ng-template #nodeList let-nodes let-depth="depth">
+    <ng-container *ngFor="let node of nodes">
+
+      <!-- Leaf node (has a route, no children) -->
+      <a *ngIf="node.route && !node.children"
+         class="sidebar-link"
+         [class.depth-1]="depth === 1"
+         [routerLink]="node.route"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: false}">
+        <i class="bi" [ngClass]="node.icon || 'bi-dot'"></i>
+        <span>{{ node.name }}</span>
+      </a>
+
+      <!-- Parent node (expandable) -->
+      <div *ngIf="node.children" class="sidebar-parent">
+        <a class="sidebar-link parent-link" (click)="toggleExpand(node, $event)" href="javascript:void(0)">
+          <i class="bi" [ngClass]="node.icon || 'bi-folder'"></i>
+          <span>{{ node.name }}</span>
+          <i class="bi ms-auto chevron" [ngClass]="isExpanded(node) ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+        </a>
+        <div class="sidebar-children" *ngIf="isExpanded(node)">
+          <ng-container *ngTemplateOutlet="nodeList; context: { $implicit: node.children, depth: depth + 1 }"></ng-container>
+        </div>
+      </div>
+
+    </ng-container>
+  </ng-template>
+
+  <div class="sidebar-footer-links">
+    <a class="sidebar-link" routerLink="/app/help" routerLinkActive="active"><i class="bi bi-question-circle"></i><span>Help</span></a>
+    <a class="sidebar-link" href="javascript:void(0)"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+  </div>
+
+</aside>

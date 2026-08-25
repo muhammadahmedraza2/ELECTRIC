@@ -1,0 +1,34 @@
+<div class="page-header">
+  <div>
+    <h4>Help &amp; Services</h4>
+    <p class="text-muted mb-0">Support resources and available services</p>
+  </div>
+</div>
+
+<div class="help-grid mb-4">
+  <div class="help-card"><i class="bi bi-patch-question"></i><h6>FAQ</h6><p>Answers to common questions</p></div>
+  <div class="help-card"><i class="bi bi-headset"></i><h6>Contact Support</h6><p>Reach our team 9am–9pm daily</p></div>
+  <div class="help-card"><i class="bi bi-arrow-return-left"></i><h6>Return Help</h6><p>Guidance on returns &amp; refunds</p></div>
+  <div class="help-card"><i class="bi bi-receipt-cutoff"></i><h6>Order Help</h6><p>Tracking, changes &amp; cancellations</p></div>
+  <div class="help-card"><i class="bi bi-credit-card"></i><h6>Payment Help</h6><p>Payment methods &amp; issues</p></div>
+</div>
+
+<h6 class="mb-2">Our Services</h6>
+<div class="help-grid mb-4">
+  <div class="help-card"><i class="bi bi-truck"></i><h6>Home Delivery</h6><p>Fast, tracked delivery nationwide</p></div>
+  <div class="help-card"><i class="bi bi-tools"></i><h6>Installation</h6><p>Professional setup for major appliances</p></div>
+  <div class="help-card"><i class="bi bi-shield-check"></i><h6>Warranty</h6><p>Official brand warranty on every product</p></div>
+  <div class="help-card"><i class="bi bi-wrench-adjustable"></i><h6>Repair Service</h6><p>Certified repair &amp; maintenance</p></div>
+  <div class="help-card"><i class="bi bi-chat-dots"></i><h6>Customer Support</h6><p>Always here to help</p></div>
+</div>
+
+<h6 class="mb-2">Frequently Asked Questions</h6>
+<div class="card-surface p-0">
+  <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+    <button class="faq-question" (click)="toggle(i)">
+      <span>{{ faq.q }}</span>
+      <i class="bi" [ngClass]="openIndex() === i ? 'bi-dash' : 'bi-plus'"></i>
+    </button>
+    <div class="faq-answer" *ngIf="openIndex() === i">{{ faq.a }}</div>
+  </div>
+</div>

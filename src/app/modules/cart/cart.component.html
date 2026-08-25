@@ -1,0 +1,54 @@
+<div class="page-header">
+  <div>
+    <h4>Shopping Cart</h4>
+    <p class="text-muted mb-0">{{ cart.itemCount() }} item(s) in your cart</p>
+  </div>
+</div>
+
+<app-empty-state *ngIf="cart.cartItems().length === 0" icon="bi-cart-x" title="Your cart is empty" message="Browse products and add items to your cart."></app-empty-state>
+
+<div class="cart-layout" *ngIf="cart.cartItems().length > 0">
+  <div class="card-surface p-0">
+    <div class="table-responsive">
+      <table class="table-app">
+        <thead>
+          <tr><th>Product</th><th>Unit Price</th><th>Qty</th><th>Total</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let line of cart.cartItems()">
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="cart-thumb"><i class="bi" [ngClass]="line.product.image"></i></div>
+                <div>
+                  <div class="fw-semibold">{{ line.product.name }}</div>
+                  <small class="text-muted">{{ line.product.brand }}</small>
+                </div>
+              </div>
+            </td>
+            <td>Rs {{ line.product.price | number }}</td>
+            <td>
+              <div class="qty-stepper">
+                <button (click)="cart.updateQuantity(line.product.id, line.quantity - 1)">-</button>
+                <span>{{ line.quantity }}</span>
+                <button (click)="cart.updateQuantity(line.product.id, line.quantity + 1)">+</button>
+              </div>
+            </td>
+            <td class="fw-semibold">Rs {{ lineTotal(line.product, line.quantity) | number }}</td>
+            <td><button class="btn-icon-danger" (click)="cart.removeFromCart(line.product.id)"><i class="bi bi-trash"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card-surface cart-summary">
+    <h6 class="mb-3">Order Summary</h6>
+    <div class="summary-row"><span>Subtotal</span><span>Rs {{ cart.summary().subtotal | number }}</span></div>
+    <div class="summary-row"><span>Discount</span><span class="text-success">- Rs {{ cart.summary().discount | number }}</span></div>
+    <div class="summary-row"><span>Delivery Charges</span><span>Rs {{ cart.summary().deliveryCharges | number }}</span></div>
+    <div class="summary-row summary-total"><span>Grand Total</span><span>Rs {{ cart.summary().grandTotal | number }}</span></div>
+    <button class="btn-app-primary btn w-100 mt-3" (click)="checkout()">
+      <i class="bi bi-check2-circle me-1"></i> Proceed to Checkout
+    </button>
+  </div>
+</div>

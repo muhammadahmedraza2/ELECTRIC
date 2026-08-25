@@ -1,0 +1,15 @@
+<div class="page-header">
+  <div>
+    <h4>Orders</h4>
+    <p class="text-muted mb-0">All customer orders and their current status</p>
+  </div>
+</div>
+
+<app-data-grid
+  [rows]="rows()"
+  [columns]="columns"
+  [loading]="loading()"
+  [showActions]="true"
+  emptyMessage="No orders placed yet."
+  (view)="onView($event)">
+</app-data-grid>

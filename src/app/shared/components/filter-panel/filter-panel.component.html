@@ -1,0 +1,40 @@
+<div class="filter-panel card-surface">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h6 class="mb-0">Filters</h6>
+    <button class="btn-link-reset" (click)="resetFilters()">Reset</button>
+  </div>
+
+  <div class="filter-group">
+    <label>Brand</label>
+    <div class="filter-check" *ngFor="let brand of availableBrands">
+      <input type="checkbox" [id]="'brand-' + brand"
+             [checked]="selectedBrands.includes(brand)"
+             (change)="toggleBrand(brand)">
+      <label [for]="'brand-' + brand">{{ brand }}</label>
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <label>Price Range (Rs)</label>
+    <div class="d-flex gap-2">
+      <input type="number" class="toolbar-select" placeholder="Min" [(ngModel)]="minPrice" (change)="emitChange()">
+      <input type="number" class="toolbar-select" placeholder="Max" [(ngModel)]="maxPrice" (change)="emitChange()">
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <label>Minimum Rating</label>
+    <div class="d-flex gap-1">
+      <button *ngFor="let r of [4,3,2,1]" class="rating-chip" [class.active]="minRating === r" (click)="setRating(r)">
+        {{ r }}<i class="bi bi-star-fill ms-1"></i>+
+      </button>
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <div class="filter-check">
+      <input type="checkbox" id="inStock" [(ngModel)]="inStockOnly" (change)="emitChange()">
+      <label for="inStock">In Stock Only</label>
+    </div>
+  </div>
+</div>

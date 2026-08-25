@@ -1,0 +1,27 @@
+<div class="pagination-bar" *ngIf="totalItems > 0">
+  <div class="d-flex align-items-center gap-2">
+    <span class="text-muted small">Rows per page</span>
+    <select class="toolbar-select" style="min-width:80px" [value]="pageSize" (change)="onSizeChange($event)">
+      <option [value]="8">8</option>
+      <option [value]="12">12</option>
+      <option [value]="16">16</option>
+      <option [value]="24">24</option>
+    </select>
+  </div>
+
+  <div class="pagination-controls">
+    <button class="page-btn" [disabled]="currentPage === 1" (click)="goTo(1)">
+      <i class="bi bi-chevron-double-left"></i>
+    </button>
+    <button class="page-btn" [disabled]="currentPage === 1" (click)="goTo(currentPage - 1)">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <button class="page-btn" *ngFor="let p of pages" [class.active]="p === currentPage" (click)="goTo(p)">{{ p }}</button>
+    <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goTo(currentPage + 1)">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+    <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goTo(totalPages)">
+      <i class="bi bi-chevron-double-right"></i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="page-header">
+  <div>
+    <h4>Offers &amp; Events</h4>
+    <p class="text-muted mb-0">Promotional campaigns and seasonal sales</p>
+  </div>
+</div>
+
+<app-loading *ngIf="loading()" message="Loading offers..."></app-loading>
+
+<div *ngIf="!loading()">
+  <h6 class="mb-2">Active Offers</h6>
+  <div class="offer-grid mb-4" *ngIf="activeOffers().length; else noActive">
+    <div class="offer-card" *ngFor="let o of activeOffers()">
+      <div class="offer-card-icon"><i class="bi" [ngClass]="o.image"></i></div>
+      <h6>{{ o.title }}</h6>
+      <p class="text-muted">{{ o.description }}</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="offer-pill">{{ o.discount }}% OFF</span>
+        <small class="text-muted">Ends {{ o.endDate | date:'mediumDate' }}</small>
+      </div>
+    </div>
+  </div>
+  <ng-template #noActive>
+    <app-empty-state icon="bi-gift" title="No active offers right now" message="Check back soon for new deals."></app-empty-state>
+  </ng-template>
+
+  <div *ngIf="upcomingOffers().length">
+    <h6 class="mb-2">Upcoming Offers</h6>
+    <div class="offer-grid mb-4">
+      <div class="offer-card muted-card" *ngFor="let o of upcomingOffers()">
+        <div class="offer-card-icon"><i class="bi" [ngClass]="o.image"></i></div>
+        <h6>{{ o.title }}</h6>
+        <p class="text-muted">{{ o.description }}</p>
+        <small class="text-muted">Starts {{ o.startDate | date:'mediumDate' }}</small>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="expiredOffers().length">
+    <h6 class="mb-2">Past Offers</h6>
+    <div class="offer-grid">
+      <div class="offer-card muted-card" *ngFor="let o of expiredOffers()">
+        <div class="offer-card-icon"><i class="bi" [ngClass]="o.image"></i></div>
+        <h6>{{ o.title }}</h6>
+        <small class="text-muted">Ended {{ o.endDate | date:'mediumDate' }}</small>
+      </div>
+    </div>
+  </div>
+</div>

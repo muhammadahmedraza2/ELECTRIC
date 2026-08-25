@@ -1,0 +1,35 @@
+<div class="product-card">
+  <button class="wishlist-btn" (click)="toggleWishlist($event)">
+    <i class="bi" [ngClass]="wishlist.isWishlisted(product.id) ? 'bi-heart-fill text-danger' : 'bi-heart'"></i>
+  </button>
+
+  <a class="product-image-wrap" [routerLink]="['/app/product', product.id]">
+    <div class="product-image"><i class="bi" [ngClass]="product.image"></i></div>
+  </a>
+
+  <div class="product-body">
+    <span class="product-badge" *ngIf="product.isOffer">-{{ product.discount }}%</span>
+    <a class="product-name" [routerLink]="['/app/product', product.id]">{{ product.name }}</a>
+    <span class="product-brand">{{ product.brand }} · {{ product.model }}</span>
+
+    <div class="product-rating">
+      <i class="bi" *ngFor="let s of ratingStars"
+         [ngClass]="s < product.rating ? 'bi-star-fill' : 'bi-star'"></i>
+      <span>{{ product.rating }}</span>
+    </div>
+
+    <div class="product-price-row">
+      <span class="price-current">Rs {{ discountedPrice | number }}</span>
+      <span class="price-original" *ngIf="product.discount > 0">Rs {{ product.price | number }}</span>
+    </div>
+
+    <span class="badge-status" [ngClass]="statusClass">{{ status }}</span>
+
+    <div class="product-actions">
+      <button class="btn-app-primary btn btn-sm flex-grow-1" [disabled]="product.stock === 0" (click)="addToCart($event)">
+        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+      </button>
+      <a class="btn-app-outline btn btn-sm" [routerLink]="['/app/product', product.id]">Details</a>
+    </div>
+  </div>
+</div>

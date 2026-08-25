@@ -1,0 +1,40 @@
+<div class="page-header">
+  <div>
+    <h4>Dashboard</h4>
+    <p class="text-muted mb-0">Overview of your electronics store performance</p>
+  </div>
+</div>
+
+<app-loading *ngIf="loading()" message="Loading dashboard..."></app-loading>
+
+<div *ngIf="!loading()">
+
+  <div class="stat-grid mb-3" *ngIf="summary() as s">
+    <app-stat-card label="Total Products" [value]="s.totalProducts" icon="bi-box-seam" variant="primary"></app-stat-card>
+    <app-stat-card label="Total Categories" [value]="s.totalCategories" icon="bi-diagram-3" variant="info"></app-stat-card>
+    <app-stat-card label="Total Orders" [value]="s.totalOrders" icon="bi-receipt" variant="success"></app-stat-card>
+    <app-stat-card label="Total Sales" [value]="'Rs ' + (s.totalSales | number)" icon="bi-cash-stack" variant="success"></app-stat-card>
+    <app-stat-card label="Pending Orders" [value]="s.pendingOrders" icon="bi-hourglass-split" variant="warning"></app-stat-card>
+    <app-stat-card label="Low Stock Products" [value]="s.lowStockProducts" icon="bi-exclamation-triangle" variant="danger"></app-stat-card>
+    <app-stat-card label="Active Offers" [value]="s.activeOffers" icon="bi-gift" variant="primary"></app-stat-card>
+  </div>
+
+  <div class="offer-banner-row mb-3" *ngIf="activeOffers().length">
+    <app-offer-banner *ngFor="let offer of activeOffers()" [offer]="offer"></app-offer-banner>
+  </div>
+
+  <div class="chart-row mb-3">
+    <div class="chart-box"><canvas #categoryChart></canvas></div>
+    <div class="chart-box"><canvas #orderChart></canvas></div>
+  </div>
+
+  <h6 class="mb-2">All Products</h6>
+  <app-data-grid
+    [rows]="gridRows()"
+    [columns]="columns"
+    [showActions]="true"
+    emptyMessage="No products available."
+    (view)="onViewProduct($event)">
+  </app-data-grid>
+
+</div>

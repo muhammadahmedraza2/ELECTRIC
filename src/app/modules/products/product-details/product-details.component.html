@@ -1,0 +1,80 @@
+<app-loading *ngIf="loading()" message="Loading product details..."></app-loading>
+
+<app-empty-state *ngIf="!loading() && !product()" icon="bi-exclamation-circle" title="Product not found" message="This product may have been removed." [isError]="true"></app-empty-state>
+
+<div class="product-details" *ngIf="!loading() && product() as p">
+  <div class="pd-image">
+    <i class="bi" [ngClass]="p.image"></i>
+  </div>
+
+  <div class="pd-info">
+    <span class="product-badge" *ngIf="p.isOffer">-{{ p.discount }}% OFF</span>
+    <h3>{{ p.name }}</h3>
+    <p class="text-muted mb-2">{{ p.brand }} · Model: {{ p.model }}</p>
+
+    <div class="product-rating mb-2">
+      <i class="bi" *ngFor="let s of ratingStars" [ngClass]="s < p.rating ? 'bi-star-fill' : 'bi-star'"></i>
+      <span>{{ p.rating }} / 5</span>
+    </div>
+
+    <div class="pd-price-row">
+      <span class="pd-price-current">Rs {{ discountedPrice | number }}</span>
+      <span class="pd-price-original" *ngIf="p.discount > 0">Rs {{ p.price | number }}</span>
+    </div>
+
+    <span class="badge-status mb-3" [ngClass]="{
+      'badge-instock': status === 'In Stock',
+      'badge-low': status === 'Low Stock',
+      'badge-out': status === 'Out of Stock'
+    }">{{ status }}</span>
+
+    <p>{{ p.description }}</p>
+
+    <div class="pd-qty-row" *ngIf="p.stock > 0">
+      <span>Quantity</span>
+      <div class="qty-stepper">
+        <button (click)="changeQty(-1)">-</button>
+        <span>{{ quantity() }}</span>
+        <button (click)="changeQty(1)">+</button>
+      </div>
+    </div>
+
+    <div class="pd-actions">
+      <button class="btn-app-primary btn" [disabled]="p.stock === 0" (click)="addToCart()">
+        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+      </button>
+      <button class="btn-app-outline btn" [disabled]="p.stock === 0" (click)="buyNow()">
+        Buy Now
+      </button>
+      <button class="btn-app-outline btn" (click)="toggleWishlist()">
+        <i class="bi" [ngClass]="wishlist.isWishlisted(p.id) ? 'bi-heart-fill text-danger' : 'bi-heart'"></i>
+        Wishlist
+      </button>
+    </div>
+
+    <div class="pd-section">
+      <h6>Specifications</h6>
+      <table class="table-app">
+        <tbody>
+          <tr *ngFor="let spec of p.specifications">
+            <td class="text-muted" style="width:180px">{{ spec.label }}</td>
+            <td>{{ spec.value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pd-section">
+      <h6>Features</h6>
+      <ul class="pd-features">
+        <li *ngFor="let f of p.features"><i class="bi bi-check-circle-fill text-success me-2"></i>{{ f }}</li>
+      </ul>
+    </div>
+
+    <div class="pd-section">
+      <h6>Warranty &amp; Delivery</h6>
+      <p class="mb-1"><i class="bi bi-shield-check me-2"></i>{{ p.warranty }}</p>
+      <p class="mb-0"><i class="bi bi-truck me-2"></i>Estimated delivery: 3-5 business days</p>
+    </div>
+  </div>
+</div>

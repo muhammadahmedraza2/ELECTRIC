@@ -1,0 +1,30 @@
+<app-loading *ngIf="loading" message="Loading products..."></app-loading>
+
+<div *ngIf="!loading">
+  <div class="shop-toolbar">
+    <input type="text" class="toolbar-input" placeholder="Search products or brand..." [(ngModel)]="searchTerm" (ngModelChange)="currentPage.set(1)">
+    <app-sort-dropdown [value]="sortKey()" (valueChange)="onSortChange($event)"></app-sort-dropdown>
+    <span class="text-muted small">{{ filteredSorted().length }} product(s)</span>
+  </div>
+
+  <div class="pg-layout" [class.no-filters]="!showFilters">
+    <app-filter-panel *ngIf="showFilters" [products]="products" (filterChange)="onFilterChange($event)"></app-filter-panel>
+
+    <div>
+      <div class="item-grid" *ngIf="pagedItems().length; else emptyState">
+        <app-product-card *ngFor="let p of pagedItems()" [product]="p"></app-product-card>
+      </div>
+      <ng-template #emptyState>
+        <app-empty-state icon="bi-search" title="No products found" message="Try adjusting your filters or search term."></app-empty-state>
+      </ng-template>
+
+      <app-pagination
+        [totalItems]="filteredSorted().length"
+        [pageSize]="pageSize()"
+        [currentPage]="currentPage()"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)">
+      </app-pagination>
+    </div>
+  </div>
+</div>

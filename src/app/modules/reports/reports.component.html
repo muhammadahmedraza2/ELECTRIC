@@ -1,0 +1,15 @@
+<div class="page-header">
+  <div>
+    <h4>Reports</h4>
+    <p class="text-muted mb-0">Sales performance and best-selling products</p>
+  </div>
+</div>
+
+<div class="stat-grid mb-3">
+  <app-stat-card label="Total Revenue" [value]="'Rs ' + (totalRevenue() | number)" icon="bi-cash-stack" variant="success"></app-stat-card>
+  <app-stat-card label="Total Orders" [value]="totalOrders()" icon="bi-receipt" variant="primary"></app-stat-card>
+  <app-stat-card label="Avg. Order Value" [value]="'Rs ' + (avgOrderValue() | number)" icon="bi-graph-up" variant="info"></app-stat-card>
+</div>
+
+<h6 class="mb-2">Top Selling Products</h6>
+<app-data-grid [rows]="topProductsRows()" [columns]="columns" [loading]="loading()" emptyMessage="No sales data available."></app-data-grid>

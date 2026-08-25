@@ -1,0 +1,32 @@
+<header class="app-header">
+  <button class="btn-app-outline btn d-lg-none" (click)="toggleSidebar.emit()">
+    <i class="bi bi-list"></i>
+  </button>
+
+  <h5 class="header-title d-none d-md-block">Electronics Management Console</h5>
+
+  <div class="header-actions">
+    <button class="header-icon-btn" (click)="toggleDarkMode()" title="Toggle theme">
+      <i class="bi" [ngClass]="theme.theme().mode === 'dark' ? 'bi-sun' : 'bi-moon-stars'"></i>
+    </button>
+
+    <a class="header-icon-btn" routerLink="/app/wishlist" title="Wishlist">
+      <i class="bi bi-heart"></i>
+      <span class="header-badge" *ngIf="wishlist.wishlistIds().length > 0">{{ wishlist.wishlistIds().length }}</span>
+    </a>
+
+    <a class="header-icon-btn" routerLink="/app/cart" title="Cart">
+      <i class="bi bi-cart3"></i>
+      <span class="header-badge" *ngIf="cart.itemCount() > 0">{{ cart.itemCount() }}</span>
+    </a>
+
+    <a class="header-icon-btn" routerLink="/app/settings" title="Settings">
+      <i class="bi bi-gear"></i>
+    </a>
+
+    <div class="header-user">
+      <div class="user-avatar">AK</div>
+      <span class="d-none d-md-inline">Admin User</span>
+    </div>
+  </div>
+</header>

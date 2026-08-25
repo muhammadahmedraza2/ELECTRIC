@@ -1,0 +1,3 @@
+<select class="toolbar-select" [value]="value" (change)="onChange($event)">
+  <option *ngFor="let opt of options" [value]="opt.key">Sort: {{ opt.label }}</option>
+</select>
