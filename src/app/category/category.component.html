@@ -14,25 +14,47 @@
 </div>
 
 <div class="item-grid" *ngIf="filteredItems().length; else empty">
-  <div class="item-card" *ngFor="let item of filteredItems()">
+@for (item of filteredItems(); track item.id) {
+  <div class="item-card">
     <button class="fav-btn" (click)="toggleFav(item)">
-      <i class="bi" [ngClass]="fav.isFavorite(item.id) ? 'bi-heart-fill text-danger' : 'bi-heart'"></i>
+      <i
+        class="bi"
+        [ngClass]="fav.isFavorite(item.id) ? 'bi-heart-fill text-danger' : 'bi-heart'">
+      </i>
     </button>
-    <div class="item-icon"><i class="bi bi-box-seam"></i></div>
+
+    <div class="item-icon">
+      <i class="bi bi-box-seam"></i>
+    </div>
+
     <h6>{{ item.name }}</h6>
-    <span class="item-meta">{{ item.brand }} · Stock: {{ item.stock }}</span>
-    <span class="badge-status align-self-start" [ngClass]="{
-            'badge-instock': item.status === 'In Stock',
-            'badge-low': item.status === 'Low Stock',
-            'badge-out': item.status === 'Out of Stock'
-          }">{{ item.status }}</span>
+
+    <span class="item-meta">
+      {{ item.brand }} · Stock: {{ item.stock }}
+    </span>
+
+    <span
+      class="badge-status align-self-start"
+      [ngClass]="{
+        'badge-instock': item.status === 'In Stock',
+        'badge-low': item.status === 'Low Stock',
+        'badge-out': item.status === 'Out of Stock'
+      }">
+      {{ item.status }}
+    </span>
+
     <div class="item-card-footer">
       <span class="item-price">Rs {{ item.price | number }}</span>
-      <button class="add-btn" [disabled]="item.stock === 0" (click)="add(item)">
+
+      <button
+        class="add-btn"
+        [disabled]="item.stock === 0"
+        (click)="add(item)">
         <i class="bi bi-cart-plus"></i>
       </button>
     </div>
   </div>
+}
 </div>
 
 <ng-template #empty>

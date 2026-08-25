@@ -5,21 +5,30 @@
       <div><h3>{{ totalItems }}</h3><span>Total Items</span></div>
     </div>
   </div>
+
   <div class="col-md-3">
     <div class="stat-card">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#17b26a,#22d38a)"><i class="bi bi-diagram-3"></i></div>
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#17b26a,#22d38a)">
+        <i class="bi bi-diagram-3"></i>
+      </div>
       <div><h3>{{ totalCategories }}</h3><span>Categories</span></div>
     </div>
   </div>
+
   <div class="col-md-3">
     <div class="stat-card">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#f5a524,#ffcb61)"><i class="bi bi-exclamation-triangle"></i></div>
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#f5a524,#ffcb61)">
+        <i class="bi bi-exclamation-triangle"></i>
+      </div>
       <div><h3>{{ lowStockCount }}</h3><span>Low Stock</span></div>
     </div>
   </div>
+
   <div class="col-md-3">
     <div class="stat-card">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#f04438,#ff7a70)"><i class="bi bi-x-circle"></i></div>
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#f04438,#ff7a70)">
+        <i class="bi bi-x-circle"></i>
+      </div>
       <div><h3>{{ outOfStockCount }}</h3><span>Out of Stock</span></div>
     </div>
   </div>
@@ -32,8 +41,16 @@
 
 <!-- Toolbar: search + sort -->
 <div class="shop-toolbar">
-  <input type="text" class="toolbar-input" placeholder="Search items or brand..." [(ngModel)]="searchTerm">
-  <select class="toolbar-select" [ngModel]="sortBy()" (change)="setSort($event)">
+  <input
+    type="text"
+    class="toolbar-input"
+    placeholder="Search items or brand..."
+    [(ngModel)]="searchTerm">
+
+  <select
+    class="toolbar-select"
+    [ngModel]="sortBy()"
+    (change)="setSort($event)">
     <option value="name-asc">Sort: Name (A–Z)</option>
     <option value="price-asc">Sort: Price (Low to High)</option>
     <option value="price-desc">Sort: Price (High to Low)</option>
@@ -43,74 +60,147 @@
 
 <!-- Category filter chips -->
 <div class="chip-row">
-  <span class="chip" [class.active]="activeCategory() === 'all'" (click)="setCategory('all')">All</span>
-  <span class="chip" *ngFor="let c of data.categories"
-        [class.active]="activeCategory() === c.slug"
-        (click)="setCategory(c.slug)">
-    <i class="bi" [ngClass]="c.icon" style="margin-right:5px"></i>{{ c.name }}
+  <span
+    class="chip"
+    [class.active]="activeCategory() === 'all'"
+    (click)="setCategory('all')">
+    All
   </span>
+
+  @for (c of data.categories; track c.slug) {
+    <span
+      class="chip"
+      [class.active]="activeCategory() === c.slug"
+      (click)="setCategory(c.slug)">
+      <i class="bi" [ngClass]="c.icon" style="margin-right:5px"></i>
+      {{ c.name }}
+    </span>
+  }
 </div>
 
 <!-- Cards grid + sticky cart -->
 <div class="shop-layout">
 
   <div class="item-grid">
-    <div class="item-card" *ngFor="let item of filteredItems()">
-      <button class="fav-btn" (click)="toggleFav(item)">
-        <i class="bi" [ngClass]="fav.isFavorite(item.id) ? 'bi-heart-fill text-danger' : 'bi-heart'"></i>
-      </button>
-      <div class="item-icon"><i class="bi bi-box-seam"></i></div>
-      <h6>{{ item.name }}</h6>
-      <span class="item-meta">{{ item.brand }} · {{ data.getCategoryName(item.category) }}</span>
-      <span class="badge-status align-self-start" [ngClass]="{
-              'badge-instock': item.status === 'In Stock',
-              'badge-low': item.status === 'Low Stock',
-              'badge-out': item.status === 'Out of Stock'
-            }">{{ item.status }}</span>
-      <div class="item-card-footer">
-        <span class="item-price">Rs {{ item.price | number }}</span>
-        <button class="add-btn" [disabled]="item.stock === 0" (click)="add(item)">
-          <i class="bi bi-cart-plus"></i>
-        </button>
-      </div>
-    </div>
 
-    <div class="text-muted text-center py-5 w-100" *ngIf="filteredItems().length === 0">
-      No matching items found.
-    </div>
+    @for (item of filteredItems(); track item.id) {
+      <div class="item-card">
+
+        <button class="fav-btn" (click)="toggleFav(item)">
+          <i
+            class="bi"
+            [ngClass]="fav.isFavorite(item.id)
+              ? 'bi-heart-fill text-danger'
+              : 'bi-heart'">
+          </i>
+        </button>
+
+        <div class="item-icon">
+          <i class="bi bi-box-seam"></i>
+        </div>
+
+        <h6>{{ item.name }}</h6>
+
+        <span class="item-meta">
+          {{ item.brand }} · {{ data.getCategoryName(item.category) }}
+        </span>
+
+        <span
+          class="badge-status align-self-start"
+          [ngClass]="{
+            'badge-instock': item.status === 'In Stock',
+            'badge-low': item.status === 'Low Stock',
+            'badge-out': item.status === 'Out of Stock'
+          }">
+          {{ item.status }}
+        </span>
+
+        <div class="item-card-footer">
+          <span class="item-price">
+            Rs {{ item.price | number }}
+          </span>
+
+          <button
+            class="add-btn"
+            [disabled]="item.stock === 0"
+            (click)="add(item)">
+            <i class="bi bi-cart-plus"></i>
+          </button>
+        </div>
+
+      </div>
+    } @empty {
+      <div class="text-muted text-center py-5 w-100">
+        No matching items found.
+      </div>
+    }
+
   </div>
 
   <!-- Right side: live cart -->
   <div class="cart-panel card-surface">
-    <h6 class="mb-3"><i class="bi bi-cart3 me-1"></i> Cart</h6>
 
-    <div *ngIf="cart.cartLines().length === 0" class="text-muted text-center py-4">
-      Cart is empty — add items from the cards.
-    </div>
+    <h6 class="mb-3">
+      <i class="bi bi-cart3 me-1"></i> Cart
+    </h6>
 
-    <div class="cart-line" *ngFor="let line of cart.cartLines()">
-      <div class="flex-grow-1">
-        <div class="fw-semibold" style="font-size:.87rem">{{ line.item.name }}</div>
-        <small class="text-muted">Rs {{ line.item.price | number }} each</small>
+    @if (cart.cartLines().length === 0) {
+      <div class="text-muted text-center py-4">
+        Cart is empty — add items from the cards.
       </div>
-      <div class="qty-stepper">
-        <button (click)="cart.updateQty(line.item.id, line.qty - 1)">-</button>
-        <span>{{ line.qty }}</span>
-        <button (click)="cart.updateQty(line.item.id, line.qty + 1)">+</button>
+    }
+
+    @for (line of cart.cartLines(); track line.item.id) {
+      <div class="cart-line">
+
+        <div class="flex-grow-1">
+          <div class="fw-semibold" style="font-size:.87rem">
+            {{ line.item.name }}
+          </div>
+
+          <small class="text-muted">
+            Rs {{ line.item.price | number }} each
+          </small>
+        </div>
+
+        <div class="qty-stepper">
+          <button
+            (click)="cart.updateQty(line.item.id, line.qty - 1)">
+            -
+          </button>
+
+          <span>{{ line.qty }}</span>
+
+          <button
+            (click)="cart.updateQty(line.item.id, line.qty + 1)">
+            +
+          </button>
+        </div>
+
+        <button
+          class="btn-icon-danger"
+          (click)="cart.removeFromCart(line.item.id)">
+          <i class="bi bi-trash"></i>
+        </button>
+
       </div>
-      <button class="btn-icon-danger" (click)="cart.removeFromCart(line.item.id)">
-        <i class="bi bi-trash"></i>
-      </button>
-    </div>
+    }
 
-    <div class="cart-total-row" *ngIf="cart.cartLines().length">
-      <span>Total</span>
-      <span>Rs {{ cart.cartTotal() | number }}</span>
-    </div>
+    @if (cart.cartLines().length) {
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span>Rs {{ cart.cartTotal() | number }}</span>
+      </div>
+    }
 
-    <button class="btn-app-primary btn w-100 mt-3" [disabled]="cart.cartLines().length === 0" routerLink="/cart">
-      <i class="bi bi-arrow-right-circle me-1"></i> Go to Cart
+    <button
+      class="btn-app-primary btn w-100 mt-3"
+      [disabled]="cart.cartLines().length === 0"
+      routerLink="/cart">
+      <i class="bi bi-arrow-right-circle me-1"></i>
+      Go to Cart
     </button>
+
   </div>
 
 </div>

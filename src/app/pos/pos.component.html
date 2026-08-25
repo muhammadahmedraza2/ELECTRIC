@@ -36,12 +36,14 @@
 
   <div class="cart-panel card-surface">
     <h6 class="mb-3"><i class="bi bi-cart3 me-1"></i> Current Sale</h6>
-
-    <div *ngIf="cart.cartLines().length === 0" class="text-muted text-center py-4">
+    @if (cart.cartLines().length === 0) {
+    <div class="text-muted text-center py-4">
       Cart is empty — add items from the left.
     </div>
+  }
 
-    <div class="cart-line" *ngFor="let line of cart.cartLines()">
+ @for (line of cart.cartLines(); track line.item.id) {
+    <div class="cart-line" >
       <div class="flex-grow-1">
         <div class="fw-semibold" style="font-size:.87rem">{{ line.item.name }}</div>
         <small class="text-muted">Rs {{ line.item.price | number }} each</small>
@@ -55,12 +57,14 @@
         <i class="bi bi-trash"></i>
       </button>
     </div>
+  }
 
-    <div class="cart-total-row" *ngIf="cart.cartLines().length">
+  @if (cart.cartLines().length) {
+    <div class="cart-total-row">
       <span>Total</span>
       <span>Rs {{ cart.cartTotal() | number }}</span>
     </div>
-
+  }
     <button class="btn-app-primary btn w-100 mt-3" [disabled]="cart.cartLines().length === 0" (click)="checkout()">
       <i class="bi bi-check2-circle me-1"></i> Checkout
     </button>

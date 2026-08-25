@@ -14,7 +14,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let line of cart.cartLines()">
+        @for (line of cart.cartLines(); track line.item.id) {
+        <tr>
           <td>{{ line.item.name }}</td>
           <td>{{ line.item.category }}</td>
           <td>Rs {{ line.item.price | number }}</td>
@@ -32,6 +33,7 @@
             </button>
           </td>
         </tr>
+      }
       </tbody>
     </table>
   </div>

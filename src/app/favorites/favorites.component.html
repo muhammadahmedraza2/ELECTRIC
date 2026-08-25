@@ -13,7 +13,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of favoriteItems()">
+        @for (item of favoriteItems(); track item.id) {
+        <tr>
           <td>{{ item.name }}</td>
           <td>{{ data.getCategoryName(item.category) }}</td>
           <td>{{ item.brand }}</td>
@@ -27,6 +28,7 @@
             </button>
           </td>
         </tr>
+      }
       </tbody>
     </table>
   </div>
