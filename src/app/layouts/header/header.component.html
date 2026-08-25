@@ -13,7 +13,7 @@
     <a class="header-icon-btn" routerLink="/app/wishlist" title="Wishlist">
       <i class="bi bi-heart"></i>
          @if (wishlist.wishlistIds().length > 0) {
-      <span class="header-badge" *ngIf="wishlist.wishlistIds().length > 0">{{ wishlist.wishlistIds().length }}</span>
+      <span class="header-badge">{{ wishlist.wishlistIds().length }}</span>
        }
       </a>
 
