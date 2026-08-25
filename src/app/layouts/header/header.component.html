@@ -12,12 +12,16 @@
 
     <a class="header-icon-btn" routerLink="/app/wishlist" title="Wishlist">
       <i class="bi bi-heart"></i>
+         @if (wishlist.wishlistIds().length > 0) {
       <span class="header-badge" *ngIf="wishlist.wishlistIds().length > 0">{{ wishlist.wishlistIds().length }}</span>
-    </a>
+       }
+      </a>
 
     <a class="header-icon-btn" routerLink="/app/cart" title="Cart">
       <i class="bi bi-cart3"></i>
-      <span class="header-badge" *ngIf="cart.itemCount() > 0">{{ cart.itemCount() }}</span>
+       @if (cart.itemCount() > 0) {
+      <span class="header-badge">{{ cart.itemCount() }}</span>
+       }
     </a>
 
     <a class="header-icon-btn" routerLink="/app/settings" title="Settings">
