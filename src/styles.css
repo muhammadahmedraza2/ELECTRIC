@@ -356,7 +356,8 @@ a{ text-decoration: none; color: inherit; }
 .toolbar-select{
   border: 1px solid var(--border-color); border-radius: var(--radius-sm);
   padding: 10px 14px; background: var(--bg-surface); color: var(--text-main);
-  font-size: .85rem; min-width: 160px;
+  font-size: .85rem;
+  min-width: 100px;
 }
 
 .chip{
