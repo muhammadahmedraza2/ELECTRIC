@@ -7,6 +7,8 @@ export interface OrderItem {
 }
 
 export type OrderStatus = 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+export type PaymentMethod = 'cash_on_delivery' | 'easypaisa';
+export type PaymentStatus = 'pending' | 'paid' | 'failed';
 
 export interface Order {
   id: number;
@@ -16,4 +18,6 @@ export interface Order {
   items: OrderItem[];
   total: number;
   status: OrderStatus;
+  paymentMethod?: PaymentMethod;
+  paymentStatus?: PaymentStatus;
 }

@@ -47,8 +47,36 @@
     <div class="summary-row"><span>Discount</span><span class="text-success">- Rs {{ cart.summary().discount | number }}</span></div>
     <div class="summary-row"><span>Delivery Charges</span><span>Rs {{ cart.summary().deliveryCharges | number }}</span></div>
     <div class="summary-row summary-total"><span>Grand Total</span><span>Rs {{ cart.summary().grandTotal | number }}</span></div>
-    <button class="btn-app-primary btn w-100 mt-3" (click)="checkout()">
-      <i class="bi bi-check2-circle me-1"></i> Proceed to Checkout
+
+    <fieldset class="mt-4">
+      <legend class="h6 mb-3">Payment method</legend>
+      <label class="form-check border rounded p-3 mb-2">
+        <input class="form-check-input" type="radio" name="paymentMethod" checked disabled>
+        <span class="form-check-label ms-2">
+          <strong>Cash on Delivery</strong>
+          <small class="d-block text-muted">Pay the delivery person in cash when your order arrives.</small>
+        </span>
+      </label>
+
+      <label class="form-check border rounded p-3 text-muted">
+        <input class="form-check-input" type="radio" name="paymentMethod" disabled>
+        <span class="form-check-label ms-2">
+          <strong>Easypaisa</strong>
+          <small class="d-block">Unavailable until merchant account and secure payment backend are configured.</small>
+        </span>
+      </label>
+    </fieldset>
+
+    <div class="alert alert-warning mt-3 mb-0" role="status" *ngIf="isDemoMode">
+      Demo mode: checkout does not submit a real order or collect payment.
+    </div>
+    <div class="alert alert-info mt-3 mb-0" role="status" *ngIf="!isDemoMode">
+      Cash is collected on delivery. Easypaisa online payment is not configured yet.
+    </div>
+
+    <button class="btn-app-primary btn w-100 mt-3" (click)="checkout()" [disabled]="isSubmitting || cart.cartItems().length === 0">
+      <i class="bi bi-check2-circle me-1"></i>
+      {{ isSubmitting ? 'Placing order...' : 'Place Cash on Delivery Order' }}
     </button>
   </div>
 </div>
