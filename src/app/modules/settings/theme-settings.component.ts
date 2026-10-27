@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ThemeService, ThemeMode, FontFamily, FontSize, SidebarMode } from '../../core/services/theme.service';
+import { ThemeService, ThemeMode, FontFamily, FontSize, SidebarMode, THEME_PRESETS } from '../../core/services/theme.service';
 import { ToastService } from '../../core/services/toast.service';
 
 @Component({
@@ -14,7 +14,7 @@ import { ToastService } from '../../core/services/toast.service';
 export class ThemeSettingsComponent {
   fonts: FontFamily[] = ['Inter', 'Roboto', 'Poppins', 'Open Sans', 'Arial'];
   fontSizes: FontSize[] = ['small', 'medium', 'large'];
-  colorPresets = ['#3457d5', '#6d5bf5', '#17b26a', '#f04438', '#f5a524', '#0ea5e9'];
+  colorPresets = THEME_PRESETS;
 
   constructor(public theme: ThemeService, private toast: ToastService) {}
 

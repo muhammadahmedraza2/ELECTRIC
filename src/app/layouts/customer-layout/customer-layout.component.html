@@ -1,0 +1,25 @@
+<div class="store-shell">
+  <header class="store-header">
+    <a class="store-brand" routerLink="/store/products" aria-label="ElectroStore home">
+      <span class="store-brand-mark"><i class="bi bi-lightning-charge-fill"></i></span>
+      <span>ElectroStore</span>
+    </a>
+    <nav class="store-nav" aria-label="Store navigation">
+      <a routerLink="/store/products" routerLinkActive="active">Shop</a>
+      <a routerLink="/store/offers" routerLinkActive="active">Offers</a>
+      <a routerLink="/store/orders" routerLinkActive="active">My orders</a>
+    </nav>
+    <a class="store-cart" routerLink="/store/cart" aria-label="Shopping cart">
+      <i class="bi bi-bag"></i>
+      <span>Cart</span>
+      @if (cart.itemCount() > 0) {
+        <span class="store-cart-count">{{ cart.itemCount() }}</span>
+      }
+    </a>
+  </header>
+
+  <main class="store-content">
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer [storeMode]="true"></app-footer>
+</div>

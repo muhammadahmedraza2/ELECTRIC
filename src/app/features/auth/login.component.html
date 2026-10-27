@@ -1,0 +1,56 @@
+<main class="login-page">
+  <section class="login-story">
+    <a class="login-wordmark" routerLink="/login">
+      <span class="login-mark"><i class="bi bi-lightning-charge-fill"></i></span>
+      <span>Ledgerly</span>
+    </a>
+    <div class="login-story-copy">
+      <p class="login-eyebrow">ONE WORKSPACE. YOUR BUSINESS.</p>
+      <h1>Run your business<br>your way.</h1>
+      <p>Set up a workspace shaped around the way you sell, stock and serve.</p>
+      <div class="login-story-tags"><span>Inventory</span><span>Sales</span><span>Online store</span></div>
+    </div>
+    <span class="login-story-index">01 / BUSINESS WORKSPACE</span>
+  </section>
+
+  <section class="login-panel">
+    <div class="login-form-wrap">
+      <p class="login-eyebrow">LOCAL DEMO ACCESS</p>
+      <h2>Welcome back</h2>
+      <p class="login-subtitle">Sign in to choose and preview a business profile.</p>
+      @if (selectedBusiness) {
+        <div class="login-selected-business">
+          <span class="login-selected-icon"><i class="bi {{ selectedBusiness.icon }}"></i></span>
+          <span>Signing in to <strong>{{ selectedBusiness.name }}</strong></span>
+          <a routerLink="/businesses">Change</a>
+        </div>
+      } @else {
+        <a class="login-business-link" routerLink="/businesses"><i class="bi bi-grid"></i> Choose a business profile first</a>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="signIn()" novalidate>
+        <label for="login-email">Email address</label>
+        <input id="login-email" type="email" formControlName="email" autocomplete="username">
+        @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {
+          <small class="field-error">Enter a valid email address.</small>
+        }
+
+        <label for="login-password">Password</label>
+        <input id="login-password" type="password" formControlName="password" autocomplete="current-password">
+        @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
+          <small class="field-error">Password must contain at least 6 characters.</small>
+        }
+
+        <button class="login-submit" type="submit">
+          Continue to workspace <i class="bi bi-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="demo-credentials">
+        <i class="bi bi-info-circle"></i>
+        <span>Local demo: <strong>owner@local.test</strong> / <strong>demo1234</strong></span>
+      </div>
+      <p class="login-local-note">No server or external account is used. Demo session stays in this browser.</p>
+    </div>
+  </section>
+</main>

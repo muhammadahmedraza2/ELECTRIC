@@ -17,9 +17,10 @@
     <label>Primary Color</label>
     <div class="d-flex gap-2 mb-2 flex-wrap">
       <span class="theme-swatch" *ngFor="let c of colorPresets"
-            [style.background]="c"
-            [class.active]="theme.theme().primaryColor === c"
-            (click)="setColor(c)"></span>
+        [style.background]="c.color"
+        [attr.title]="c.name"
+        [class.active]="theme.theme().primaryColor === c.color"
+        (click)="setColor(c.color)"></span>
       <input type="color" class="color-picker-input" [value]="theme.theme().primaryColor"
              (input)="setColor($any($event.target).value)">
     </div>

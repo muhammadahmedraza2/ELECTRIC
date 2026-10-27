@@ -1,0 +1,96 @@
+<main class="business-picker-page">
+  <header class="picker-topbar">
+    <a class="picker-wordmark" routerLink="/businesses">
+      <span class="picker-mark"><i class="bi bi-lightning-charge-fill"></i></span> Ledgerly
+    </a>
+    <div class="picker-account">
+      @if (session.session(); as account) {
+        <span class="picker-account-email">{{ account.email }}</span>
+        <button type="button" class="picker-logout" (click)="logout()" title="Sign out" aria-label="Sign out"><i class="bi bi-box-arrow-right"></i></button>
+      } @else {
+        <a class="picker-login-link" routerLink="/login">Sign in <i class="bi bi-arrow-up-right"></i></a>
+      }
+    </div>
+  </header>
+
+  <section class="picker-heading">
+    <div>
+      <p class="login-eyebrow">{{ session.isAuthenticated() ? 'WORKSPACE SETUP / 01' : 'BUSINESS DIRECTORY' }}</p>
+      <h1>{{ session.isAuthenticated() ? 'What kind of business are you running?' : 'Choose a business profile to get started.' }}</h1>
+      <p class="picker-intro">Choose a profile to preview the modules, product details and categories it starts with.</p>
+    </div>
+    <div class="picker-step" aria-label="Step 1 of 5"><span class="active"></span><span></span><span></span><span></span><span></span><small>STEP 1 OF 5</small></div>
+  </section>
+
+  <section class="picker-workspace">
+    <div class="picker-browser">
+      <div class="picker-tools">
+        <label class="picker-search">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <input type="search" [formControl]="searchForm.controls.query" placeholder="Find a business type" aria-label="Find a business type">
+          <kbd>⌘ K</kbd>
+        </label>
+        <div class="picker-filters" aria-label="Filter business types">
+          @for (group of groups; track group) {
+            <button type="button" [class.active]="activeGroup() === group" (click)="activeGroup.set(group)">{{ group }}</button>
+          }
+        </div>
+      </div>
+
+      <div class="business-card-grid">
+        @for (type of filteredTypes; track type.id) {
+          <button type="button" class="business-type-card" [class.selected]="selectedId() === type.id" [attr.aria-pressed]="selectedId() === type.id" (click)="selectType(type)">
+            <span class="business-type-icon"><i class="bi {{ type.icon }}"></i></span>
+            <span class="business-type-name">{{ type.name }}</span>
+            <span class="business-type-group">{{ type.group }}</span>
+            @if (selectedId() === type.id) { <span class="business-type-check"><i class="bi bi-check2"></i></span> }
+          </button>
+        }
+        @if (filteredTypes.length === 0) {
+          <p class="picker-empty">No matching business type. Try another search.</p>
+        }
+      </div>
+      <p class="picker-custom-note"><i class="bi bi-plus-circle"></i> New business types can be added through the business registry.</p>
+    </div>
+
+    <aside class="business-preview" aria-live="polite">
+      <div class="preview-topline"><span>PROFILE PREVIEW</span><span class="preview-live"><i></i> LIVE</span></div>
+      <div class="preview-title-row">
+        <span class="preview-icon" [style.--preview-color]="selectedType().defaultTheme.primaryColor"><i class="bi {{ selectedType().icon }}"></i></span>
+        <div><h2>{{ selectedType().name }}</h2><p>{{ selectedType().group }} profile</p></div>
+      </div>
+      <p class="preview-description">{{ selectedType().description }}</p>
+
+      <section class="preview-section">
+        <div class="preview-section-heading"><h3>Enabled modules</h3><span>{{ selectedType().modules.length }}</span></div>
+        <div class="preview-module-list">
+          @for (module of selectedType().modules; track module) {
+            <span><i class="bi bi-check2"></i>{{ module }}</span>
+          }
+        </div>
+      </section>
+
+      <section class="preview-section">
+        <div class="preview-section-heading"><h3>Product fields</h3><span>{{ selectedType().productFields.length }}</span></div>
+        <div class="preview-field-list">
+          @for (field of selectedType().productFields; track field.key) {
+            <div><span>{{ field.label }}</span>@if (field.example) { <small>{{ field.example }}</small> }</div>
+          }
+        </div>
+      </section>
+
+      <section class="preview-section preview-category-section">
+        <div class="preview-section-heading"><h3>Starter categories</h3><span>{{ selectedType().categories.length }}</span></div>
+        <div class="preview-categories">
+          @for (category of selectedType().categories; track $index) { <span>{{ category }}</span> }
+        </div>
+      </section>
+
+      <div class="preview-theme"><span class="preview-color-dot" [style.background]="selectedType().defaultTheme.primaryColor"></span><span>Default workspace color</span><strong>{{ selectedType().defaultTheme.primaryColor }}</strong></div>
+      <button class="picker-continue" type="button" (click)="useSelectedType()">
+        {{ session.isAuthenticated() ? 'Use ' + selectedType().name + ' profile' : 'Continue with ' + selectedType().name }}
+        <i class="bi bi-arrow-right"></i>
+      </button>
+    </aside>
+  </section>
+</main>

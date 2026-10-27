@@ -7,16 +7,16 @@
 
     <div class="footer-col">
       <h6>Services</h6>
-      <a routerLink="/app/help">Home Delivery</a>
-      <a routerLink="/app/help">Installation</a>
-      <a routerLink="/app/help">Warranty</a>
-      <a routerLink="/app/help">Repair Service</a>
+      <a [routerLink]="storeMode ? '/store/help' : '/admin/settings'">Home Delivery</a>
+      <a [routerLink]="storeMode ? '/store/help' : '/admin/settings'">Installation</a>
+      <a [routerLink]="storeMode ? '/store/help' : '/admin/settings'">Warranty</a>
+      <a [routerLink]="storeMode ? '/store/help' : '/admin/settings'">Repair Service</a>
     </div>
 
     <div class="footer-col">
       <h6>Quick Links</h6>
-      <a routerLink="/app/dashboard">About Us</a>
-      <a routerLink="/app/help">Contact</a>
+      <a [routerLink]="storeMode ? '/store/products' : '/admin/dashboard'">About Us</a>
+      <a [routerLink]="storeMode ? '/store/help' : '/admin/settings'">Contact</a>
       <a href="javascript:void(0)">Privacy Policy</a>
       <a href="javascript:void(0)">Terms &amp; Conditions</a>
       <a href="javascript:void(0)">Shipping Policy</a>

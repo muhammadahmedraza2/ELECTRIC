@@ -3,28 +3,25 @@
     <i class="bi bi-list"></i>
   </button>
 
-  <h5 class="header-title d-none d-md-block">Electronics Management Console</h5>
+  <h5 class="header-title d-none d-lg-block">Business Console</h5>
 
   <div class="header-actions">
+    <label class="header-search d-none d-md-flex">
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <input type="search" placeholder="Search workspace" aria-label="Search workspace">
+      <kbd>Ctrl K</kbd>
+    </label>
+
     <button class="header-icon-btn" (click)="toggleDarkMode()" title="Toggle theme">
       <i class="bi" [ngClass]="theme.theme().mode === 'dark' ? 'bi-sun' : 'bi-moon-stars'"></i>
     </button>
 
-    <a class="header-icon-btn" routerLink="/app/wishlist" title="Wishlist">
-      <i class="bi bi-heart"></i>
-         @if (wishlist.wishlistIds().length > 0) {
-      <span class="header-badge">{{ wishlist.wishlistIds().length }}</span>
-       }
-      </a>
+    <button class="header-icon-btn" title="Notifications" aria-label="Notifications">
+      <i class="bi bi-bell"></i>
+      <span class="header-badge">3</span>
+    </button>
 
-    <a class="header-icon-btn" routerLink="/app/cart" title="Cart">
-      <i class="bi bi-cart3"></i>
-       @if (cart.itemCount() > 0) {
-      <span class="header-badge">{{ cart.itemCount() }}</span>
-       }
-    </a>
-
-    <a class="header-icon-btn" routerLink="/app/settings" title="Settings">
+    <a class="header-icon-btn" routerLink="/admin/settings" title="Settings" aria-label="Settings">
       <i class="bi bi-gear"></i>
     </a>
 
