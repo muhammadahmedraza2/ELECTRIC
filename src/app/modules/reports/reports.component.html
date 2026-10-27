@@ -1,7 +1,7 @@
 <div class="page-header">
   <div>
-    <h4>Reports</h4>
-    <p class="text-muted mb-0">Sales performance and best-selling products</p>
+    <h4>{{ activeBusiness() && activeBusiness()?.id !== 'electronics' ? activeBusiness()?.name + ' Reports' : 'Reports' }}</h4>
+    <p class="text-muted mb-0">{{ activeBusiness() && activeBusiness()?.id !== 'electronics' ? 'Profile-specific sample sales and product performance' : 'Sales performance and best-selling products' }}</p>
   </div>
 </div>
 
@@ -11,5 +11,6 @@
   <app-stat-card label="Avg. Order Value" [value]="'Rs ' + (avgOrderValue() | number)" icon="bi-graph-up" variant="info"></app-stat-card>
 </div>
 
-<h6 class="mb-2">Top Selling Products</h6>
-<app-data-grid [rows]="topProductsRows()" [columns]="columns" [loading]="loading()" emptyMessage="No sales data available."></app-data-grid>
+<h6 class="mb-2">{{ activeBusiness() && activeBusiness()?.id !== 'electronics' ? 'Top ' + activeBusiness()?.name + ' Products' : 'Top Selling Products' }}</h6>
+<app-data-grid [rows]="topProductsRows()" [columns]="columns()" [loading]="loading()" emptyMessage="No sales data available."></app-data-grid>
+<small class="text-muted" *ngIf="activeBusiness() && activeBusiness()?.id !== 'electronics'">Illustrative sample metrics only; replace with tenant transactions when the backend is connected.</small>

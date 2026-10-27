@@ -1,8 +1,10 @@
 <div class="store-shell">
   <header class="store-header">
-    <a class="store-brand" routerLink="/store/products" aria-label="ElectroStore home">
-      <span class="store-brand-mark"><i class="bi bi-lightning-charge-fill"></i></span>
-      <span>ElectroStore</span>
+    <a class="store-brand" routerLink="/store/products" [attr.aria-label]="(activeBusiness()?.name || 'Business store') + ' home'">
+      <span class="store-brand-mark" [style.background]="activeBusiness()?.defaultTheme?.primaryColor || null">
+        <i class="bi" [ngClass]="activeBusiness()?.icon || 'bi-grid-1x2'"></i>
+      </span>
+      <span>{{ activeBusiness()?.name || 'Business store' }}</span>
     </a>
     <nav class="store-nav" aria-label="Store navigation">
       <a routerLink="/store/products" routerLinkActive="active">Shop</a>

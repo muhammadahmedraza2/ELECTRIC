@@ -16,7 +16,12 @@ export const BUSINESS_TYPES: BusinessTypeConfig[] = [
     modules: [...commonRetailModules, 'Expiry & Batch Tracking', 'Prescription Records'],
     productFields: [...retailFields, { key: 'batchNo', label: 'Batch number' }, { key: 'expiryDate', label: 'Expiry date' }, { key: 'salt', label: 'Salt / formula' }, { key: 'drugLicense', label: 'Drug license' }, { key: 'prescriptionRequired', label: 'Prescription required' }],
     categories: ['Prescription medicine', 'OTC medicine', 'Vitamins & supplements', 'Personal care', 'Medical devices'],
-    defaultTheme: { primaryColor: '#16845b', surfaceTone: '#edf7f1' }
+    defaultTheme: { primaryColor: '#16845b', surfaceTone: '#edf7f1' },
+    sampleProducts: [
+      { id: 'pharm-001', name: 'Paracetamol 500mg', category: 'Prescription medicine', stock: 120, attributes: { batchNo: 'PCM-2411', expiryDate: 'Nov 2027', salt: 'Paracetamol', drugLicense: 'DRAP-2048', prescriptionRequired: 'No' } },
+      { id: 'pharm-002', name: 'Vitamin D3 Capsules', category: 'Vitamins & supplements', stock: 48, attributes: { batchNo: 'VD3-0826', expiryDate: 'Aug 2027', salt: 'Cholecalciferol', drugLicense: 'DRAP-1932', prescriptionRequired: 'No' } },
+      { id: 'pharm-003', name: 'Blood Pressure Monitor', category: 'Medical devices', stock: 12, attributes: { batchNo: 'BPM-761', expiryDate: 'N/A', salt: 'N/A', drugLicense: 'MD-7781', prescriptionRequired: 'No' } }
+    ]
   },
   {
     id: 'dairy', name: 'Milk / Dairy', icon: 'bi-cup-straw', group: 'Food & Fresh',
@@ -24,7 +29,12 @@ export const BUSINESS_TYPES: BusinessTypeConfig[] = [
     modules: [...commonRetailModules, 'Freshness & Expiry', 'Daily Deliveries'],
     productFields: [...retailFields.filter(field => field.key !== 'unit'), { key: 'unit', label: 'Unit (litre, ml, pack)' }, { key: 'ratePerUnit', label: 'Rate per unit' }, { key: 'freshnessDate', label: 'Freshness date' }, { key: 'expiryDate', label: 'Expiry date' }, { key: 'supplierBatch', label: 'Supplier batch' }],
     categories: ['Fresh milk', 'Yogurt', 'Butter & cream', 'Cheese', 'Milk products'],
-    defaultTheme: { primaryColor: '#087e8b', surfaceTone: '#eaf7f7' }
+    defaultTheme: { primaryColor: '#087e8b', surfaceTone: '#eaf7f7' },
+    sampleProducts: [
+      { id: 'dairy-001', name: 'Farm Fresh Whole Milk', category: 'Fresh milk', stock: 34, attributes: { unit: '1 litre', ratePerUnit: 'Rs 270 / litre', freshnessDate: 'Today', expiryDate: '3 days', supplierBatch: 'MILK-1027' } },
+      { id: 'dairy-002', name: 'Plain Greek Yogurt', category: 'Yogurt', stock: 18, attributes: { unit: '500 ml', ratePerUnit: 'Rs 420 / pack', freshnessDate: 'Today', expiryDate: '6 days', supplierBatch: 'YOG-1026' } },
+      { id: 'dairy-003', name: 'Salted Farm Butter', category: 'Butter & cream', stock: 9, attributes: { unit: '200 g', ratePerUnit: 'Rs 390 / pack', freshnessDate: 'Yesterday', expiryDate: '18 days', supplierBatch: 'BUT-1019' } }
+    ]
   },
   {
     id: 'hardware', name: 'Hardware', icon: 'bi-tools', group: 'Specialty',
@@ -48,7 +58,12 @@ export const BUSINESS_TYPES: BusinessTypeConfig[] = [
     modules: [...commonRetailModules, 'Size & Color Variants', 'Variant Stock'],
     productFields: [...retailFields, { key: 'size', label: 'Size' }, { key: 'color', label: 'Color' }, { key: 'fabric', label: 'Fabric' }, { key: 'design', label: 'Design / style' }, { key: 'variantStock', label: 'Stock by variant' }],
     categories: ['Abaya', 'Burkha', 'Clothes', 'Hijab', 'Accessories'],
-    defaultTheme: { primaryColor: '#53616c', surfaceTone: '#f0f3f5' }
+    defaultTheme: { primaryColor: '#53616c', surfaceTone: '#f0f3f5' },
+    sampleProducts: [
+      { id: 'gar-001', name: 'Nida Classic Open Abaya', category: 'Abaya', stock: 18, attributes: { size: 'M, L, XL', color: 'Black', fabric: 'Premium Nida', design: 'Open front, minimal trim', variantStock: 'M: 6 / L: 8 / XL: 4' } },
+      { id: 'gar-002', name: 'Embroidered Occasion Burkha', category: 'Burkha', stock: 11, attributes: { size: 'S, M, L', color: 'Deep Navy', fabric: 'Chiffon blend', design: 'Embroidered cuffs', variantStock: 'S: 2 / M: 5 / L: 4' } },
+      { id: 'gar-003', name: 'Everyday Cotton Hijab', category: 'Hijab', stock: 32, attributes: { size: 'Free size', color: 'Stone, Black, Olive', fabric: 'Soft cotton voile', design: 'Plain', variantStock: 'Stone: 12 / Black: 14 / Olive: 6' } }
+    ]
   },
   {
     id: 'bakery', name: 'Bakery', icon: 'bi-cake2', group: 'Food & Fresh',

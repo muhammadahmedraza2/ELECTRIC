@@ -1,8 +1,8 @@
 <footer class="app-footer">
   <div class="footer-grid">
     <div class="footer-col">
-      <h6><i class="bi bi-lightning-charge-fill me-1"></i> ElectroStore</h6>
-      <p>Quality electronics for every home and office — from TVs to components, all in one place.</p>
+      <h6><i class="bi me-1" [ngClass]="activeBusiness()?.icon || 'bi-grid-1x2'"></i> {{ activeBusiness()?.name || 'Business workspace' }}</h6>
+      <p>{{ activeBusiness()?.description || 'Quality electronics for every home and office — from TVs to components, all in one place.' }}</p>
     </div>
 
     <div class="footer-col">
@@ -35,7 +35,7 @@
   </div>
 
   <div class="footer-bottom">
-    &copy; {{ currentYear }} ElectroStore. All Rights Reserved. <br>
+    &copy; {{ currentYear }} {{ activeBusiness()?.name || 'Business workspace' }}. All Rights Reserved. <br>
     <span>Developer &copy; Ahmed Raza </span>
   </div>
 </footer>

@@ -1,7 +1,7 @@
 <div class="page-header">
   <div>
-    <h4>Orders</h4>
-    <p class="text-muted mb-0">All customer orders and their current status</p>
+    <h4>{{ activeBusiness() && activeBusiness()?.id !== 'electronics' ? activeBusiness()?.name + ' Orders' : 'Orders' }}</h4>
+    <p class="text-muted mb-0">{{ activeBusiness() && activeBusiness()?.id !== 'electronics' ? 'Sample orders for your ' + activeBusiness()?.name + ' workspace' : 'All customer orders and their current status' }}</p>
   </div>
 </div>
 
@@ -13,3 +13,4 @@
   emptyMessage="No orders placed yet."
   (view)="onView($event)">
 </app-data-grid>
+<small class="text-muted" *ngIf="activeBusiness() && activeBusiness()?.id !== 'electronics'">Illustrative demo orders only; these are not saved transactions.</small>

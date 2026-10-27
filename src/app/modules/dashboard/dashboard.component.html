@@ -1,40 +1,78 @@
 <div class="page-header">
   <div>
-    <h4>Dashboard</h4>
-    <p class="text-muted mb-0">Overview of your electronics store performance</p>
+    <h4>{{ isElectronicsDashboard() ? 'Dashboard' : activeBusiness()?.name + ' Dashboard' }}</h4>
+    <p class="text-muted mb-0">{{ isElectronicsDashboard() ? 'Overview of your electronics store performance' : 'Workspace overview configured for ' + activeBusiness()?.name }}</p>
   </div>
+  <a class="btn-app-outline btn" routerLink="/setup/business-type"><i class="bi bi-shop-window me-1"></i> Change business</a>
 </div>
 
-<app-loading *ngIf="loading()" message="Loading dashboard..."></app-loading>
+<ng-container *ngIf="isElectronicsDashboard(); else businessDashboard">
+  <app-loading *ngIf="loading()" message="Loading dashboard..."></app-loading>
 
-<div *ngIf="!loading()">
+  <div *ngIf="!loading()">
+    <div class="stat-grid mb-3" *ngIf="summary() as s">
+      <app-stat-card label="Total Products" [value]="s.totalProducts" icon="bi-box-seam" variant="primary"></app-stat-card>
+      <app-stat-card label="Total Categories" [value]="s.totalCategories" icon="bi-diagram-3" variant="info"></app-stat-card>
+      <app-stat-card label="Total Orders" [value]="s.totalOrders" icon="bi-receipt" variant="success"></app-stat-card>
+      <app-stat-card label="Total Sales" [value]="'Rs ' + (s.totalSales | number)" icon="bi-cash-stack" variant="success"></app-stat-card>
+      <app-stat-card label="Pending Orders" [value]="s.pendingOrders" icon="bi-hourglass-split" variant="warning"></app-stat-card>
+      <app-stat-card label="Low Stock Products" [value]="s.lowStockProducts" icon="bi-exclamation-triangle" variant="danger"></app-stat-card>
+      <app-stat-card label="Active Offers" [value]="s.activeOffers" icon="bi-gift" variant="primary"></app-stat-card>
+    </div>
 
-  <div class="stat-grid mb-3" *ngIf="summary() as s">
-    <app-stat-card label="Total Products" [value]="s.totalProducts" icon="bi-box-seam" variant="primary"></app-stat-card>
-    <app-stat-card label="Total Categories" [value]="s.totalCategories" icon="bi-diagram-3" variant="info"></app-stat-card>
-    <app-stat-card label="Total Orders" [value]="s.totalOrders" icon="bi-receipt" variant="success"></app-stat-card>
-    <app-stat-card label="Total Sales" [value]="'Rs ' + (s.totalSales | number)" icon="bi-cash-stack" variant="success"></app-stat-card>
-    <app-stat-card label="Pending Orders" [value]="s.pendingOrders" icon="bi-hourglass-split" variant="warning"></app-stat-card>
-    <app-stat-card label="Low Stock Products" [value]="s.lowStockProducts" icon="bi-exclamation-triangle" variant="danger"></app-stat-card>
-    <app-stat-card label="Active Offers" [value]="s.activeOffers" icon="bi-gift" variant="primary"></app-stat-card>
+    <div class="offer-banner-row mb-3" *ngIf="activeOffers().length">
+      <app-offer-banner *ngFor="let offer of activeOffers()" [offer]="offer"></app-offer-banner>
+    </div>
+
+    <div class="chart-row mb-3">
+      <div class="chart-box"><canvas #categoryChart></canvas></div>
+      <div class="chart-box"><canvas #orderChart></canvas></div>
+    </div>
+
+    <h6 class="mb-2">All Products</h6>
+    <app-data-grid
+      [rows]="gridRows()"
+      [columns]="columns"
+      [showActions]="true"
+      emptyMessage="No products available."
+      (view)="onViewProduct($event)">
+    </app-data-grid>
   </div>
+</ng-container>
 
-  <div class="offer-banner-row mb-3" *ngIf="activeOffers().length">
-    <app-offer-banner *ngFor="let offer of activeOffers()" [offer]="offer"></app-offer-banner>
+<ng-template #businessDashboard>
+  <div class="profile-dashboard">
+    <div class="profile-dashboard-metrics">
+      <article><strong>{{ activeBusiness()?.modules?.length }}</strong><span>Enabled modules</span></article>
+      <article><strong>{{ activeBusiness()?.productFields?.length }}</strong><span>Product fields</span></article>
+      <article><strong>{{ activeBusiness()?.categories?.length }}</strong><span>Starter categories</span></article>
+      <article><strong>{{ gridRows().length }}</strong><span>Sample products</span></article>
+    </div>
+
+    <section class="profile-dashboard-section">
+      <div class="profile-section-heading"><div><p>WORKSPACE PROFILE</p><h5>{{ activeBusiness()?.name }} modules</h5></div></div>
+      <div class="profile-dashboard-chips">
+        @for (module of activeBusiness()?.modules ?? []; track module) { <span><i class="bi bi-check2"></i>{{ module }}</span> }
+      </div>
+    </section>
+
+    <section class="profile-dashboard-section">
+      <div class="profile-section-heading"><div><p>INVENTORY CONFIGURATION</p><h5>{{ activeBusiness()?.name }} product fields</h5></div></div>
+      <div class="profile-dashboard-chips profile-field-chips">
+        @for (field of activeBusiness()?.productFields ?? []; track field.key) { <span>{{ field.label }}</span> }
+      </div>
+    </section>
+
+    <section class="profile-dashboard-section">
+      <div class="profile-section-heading"><div><p>CATALOG</p><h5>Starter categories</h5></div></div>
+      <div class="profile-dashboard-chips profile-category-chips">
+        @for (category of activeBusiness()?.categories ?? []; track $index) { <span>{{ category }}</span> }
+      </div>
+    </section>
+
+    <section class="profile-dashboard-section">
+      <div class="profile-section-heading"><div><p>DEMO INVENTORY</p><h5>{{ activeBusiness()?.name }} products</h5></div></div>
+      <app-data-grid [rows]="gridRows()" [columns]="profileColumns" [showActions]="false" emptyMessage="No sample products configured for this business type."></app-data-grid>
+    </section>
   </div>
-
-  <div class="chart-row mb-3">
-    <div class="chart-box"><canvas #categoryChart></canvas></div>
-    <div class="chart-box"><canvas #orderChart></canvas></div>
-  </div>
-
-  <h6 class="mb-2">All Products</h6>
-  <app-data-grid
-    [rows]="gridRows()"
-    [columns]="columns"
-    [showActions]="true"
-    emptyMessage="No products available."
-    (view)="onViewProduct($event)">
-  </app-data-grid>
-
-</div>
+</ng-template>

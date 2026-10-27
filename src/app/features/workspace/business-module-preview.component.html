@@ -1,0 +1,37 @@
+@if (business(); as profile) {
+  @if (moduleName(); as module) {
+    <div class="page-header">
+      <div>
+        <p class="login-eyebrow">{{ profile.name.toUpperCase() }} WORKSPACE</p>
+        <h4>{{ module }}</h4>
+        <p class="text-muted mb-0">{{ moduleDescription() }}</p>
+      </div>
+      <a class="btn-app-outline btn" routerLink="/admin/dashboard"><i class="bi bi-arrow-left me-1"></i> Dashboard</a>
+    </div>
+
+    <div class="profile-dashboard-metrics mb-3">
+      <article><strong>{{ profile.modules.length }}</strong><span>Enabled modules</span></article>
+      <article><strong>{{ profile.productFields.length }}</strong><span>Business-specific fields</span></article>
+      <article><strong>{{ profile.categories.length }}</strong><span>Catalog categories</span></article>
+      <article><strong>{{ profile.sampleProducts?.length || 0 }}</strong><span>Sample products</span></article>
+    </div>
+
+    <section class="profile-dashboard-section mb-3">
+      <div class="profile-section-heading"><div><p>CONFIGURED FOR {{ profile.name.toUpperCase() }}</p><h5>{{ module }} setup</h5></div></div>
+      <div class="profile-dashboard-chips profile-field-chips">
+        @for (field of profile.productFields; track field.key) { <span>{{ field.label }}</span> }
+      </div>
+    </section>
+
+    <section class="profile-dashboard-section">
+      <div class="profile-section-heading"><div><p>AVAILABLE CATALOG</p><h5>{{ profile.name }} categories</h5></div></div>
+      <div class="profile-dashboard-chips profile-category-chips">
+        @for (category of profile.categories; track $index) { <span>{{ category }}</span> }
+      </div>
+      <p class="text-muted small mt-3 mb-0">This module is enabled for your profile. Its full operational workflow will be connected in the upcoming ERP phases.</p>
+    </section>
+  } @else {
+    <div class="page-header"><div><h4>Module not enabled</h4><p class="text-muted mb-0">This module is not part of the selected business profile.</p></div></div>
+    <a class="btn-app-outline btn" routerLink="/setup/business-type">Choose business type</a>
+  }
+}

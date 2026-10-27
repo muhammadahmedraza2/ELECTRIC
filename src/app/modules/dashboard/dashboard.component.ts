@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, signal } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { ProductService } from '../../core/services/product.service';
@@ -12,17 +12,24 @@ import { StatCardComponent } from '../../shared/components/stat-card/stat-card.c
 import { OfferBannerComponent } from '../../shared/components/offer-banner/offer-banner.component';
 import { DataGridComponent } from '../../shared/components/data-grid/data-grid.component';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
+import { BUSINESS_TYPES } from '../../core/data/business-types.data';
+import { BusinessTypeConfig } from '../../core/models/business-type.model';
+import { DemoSessionService } from '../../core/services/demo-session.service';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, StatCardComponent, OfferBannerComponent, DataGridComponent, LoadingComponent],
+  imports: [CommonModule, RouterLink, StatCardComponent, OfferBannerComponent, DataGridComponent, LoadingComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: []
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
+  private readonly session = inject(DemoSessionService);
+  readonly activeBusiness = computed(() => BUSINESS_TYPES.find(type => type.id === this.session.session()?.businessTypeId) ?? null);
+  readonly isElectronicsDashboard = computed(() => !this.activeBusiness() || this.activeBusiness()?.id === 'electronics');
+
   @ViewChild('categoryChart') categoryChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('orderChart') orderChartRef!: ElementRef<HTMLCanvasElement>;
 
@@ -32,6 +39,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   products = signal<Product[]>([]);
   orders = signal<Order[]>([]);
   gridRows = signal<Record<string, unknown>[]>([]);
+  profileColumns: GridColumn<unknown>[] = [];
 
   columns: GridColumn<unknown>[] = [
     { field: 'name', label: 'Product', sortable: true, type: 'text' },
@@ -52,6 +60,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    if (!this.isElectronicsDashboard()) {
+      this.prepareBusinessDashboard(this.activeBusiness()!);
+      return;
+    }
     this.dashboardService.getSummary().subscribe(s => this.summary.set(s));
     this.offerService.getActiveOffers().subscribe(o => this.activeOffers.set(o));
     this.orderService.getOrders().subscribe(o => this.orders.set(o));
@@ -72,6 +84,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    if (!this.isElectronicsDashboard()) return;
     // Charts render only on Dashboard, per requirement
     this.categoryService.getCategories().subscribe(categories => {
       this.productService.getProducts().subscribe(products => {
@@ -110,5 +123,34 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   onViewProduct(row: Record<string, unknown>) {
     this.router.navigate(['/app/product', row['id']]);
+  }
+
+  private prepareBusinessDashboard(business: BusinessTypeConfig): void {
+    const sampleProducts = business.sampleProducts ?? business.categories.slice(0, 3).map((category, index) => ({
+      id: `${business.id}-${index + 1}`,
+      name: category,
+      category,
+      stock: 12 + index * 4,
+      attributes: {} as Record<string, string>
+    }));
+    const standardFields = new Set(['brand', 'sku', 'stock', 'price']);
+    const detailFields = business.productFields.filter(field =>
+      !standardFields.has(field.key) && sampleProducts.some(product => product.attributes[field.key])
+    );
+
+    this.profileColumns = [
+      { field: 'name', label: 'Product', type: 'text' },
+      { field: 'category', label: 'Category', type: 'text' },
+      ...detailFields.map(field => ({ field: field.key, label: field.label, type: 'text' as const })),
+      { field: 'stock', label: 'Stock', type: 'number' }
+    ];
+    this.gridRows.set(sampleProducts.map(product => ({
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      stock: product.stock,
+      ...Object.fromEntries(detailFields.map(field => [field.key, product.attributes[field.key] ?? field.example ?? 'Not set']))
+    })));
+    this.loading.set(false);
   }
 }

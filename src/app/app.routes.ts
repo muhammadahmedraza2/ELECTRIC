@@ -28,7 +28,7 @@ export const routes: Routes = [
       },
       {
         path: 'products',
-        loadComponent: () => import('./modules/products/category-page/category-page.component').then(m => m.CategoryPageComponent)
+        loadComponent: () => import('./features/inventory/business-inventory.component').then(m => m.BusinessInventoryComponent)
       },
       {
         path: 'orders',
@@ -41,6 +41,10 @@ export const routes: Routes = [
       {
         path: 'settings',
         loadComponent: () => import('./modules/settings/theme-settings.component').then(m => m.ThemeSettingsComponent)
+      },
+      {
+        path: 'modules/:slug',
+        loadComponent: () => import('./features/workspace/business-module-preview.component').then(m => m.BusinessModulePreviewComponent)
       }
     ]
   },

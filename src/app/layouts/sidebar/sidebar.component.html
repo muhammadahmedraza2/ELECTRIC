@@ -1,16 +1,18 @@
 <aside class="app-sidebar" [class.compact]="theme.theme().sidebarMode === 'compact'">
 
   <div class="sidebar-brand">
-    <div class="brand-logo"><i class="bi bi-lightning-charge-fill"></i></div>
+    <div class="brand-logo" [style.background]="activeBusiness()?.defaultTheme?.primaryColor || null">
+      <i class="bi" [ngClass]="activeBusiness()?.icon || 'bi-grid-1x2'"></i>
+    </div>
     <div class="brand-text">
-      <strong>ElectroStore</strong>
-      <small>Enterprise Console</small>
+      <strong>{{ activeBusiness()?.name || 'ElectroStore' }}</strong>
+      <small>{{ activeBusiness() ? 'Business workspace' : 'Enterprise Console' }}</small>
     </div>
   </div>
 
   <div class="sidebar-search">
     <i class="bi bi-search"></i>
-    <input type="text" placeholder="Search by Interface" [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}">
+    <input type="text" [placeholder]="'Search ' + (activeBusiness()?.name || 'workspace')" [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}">
   </div>
 
   <nav class="sidebar-nav">
@@ -47,8 +49,7 @@
   </ng-template>
 
   <div class="sidebar-footer-links">
-    <a class="sidebar-link" routerLink="/admin/settings" routerLinkActive="active"><i class="bi bi-gear"></i><span>Settings</span></a>
-    <a class="sidebar-link" href="javascript:void(0)"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+    <button class="sidebar-link sidebar-action" type="button" (click)="logout()"><i class="bi bi-box-arrow-right"></i><span>Logout</span></button>
   </div>
 
 </aside>

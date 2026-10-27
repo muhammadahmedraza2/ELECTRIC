@@ -9,6 +9,14 @@ export interface BusinessTheme {
   surfaceTone: string;
 }
 
+export interface BusinessPreviewProduct {
+  id: string;
+  name: string;
+  category: string;
+  stock: number;
+  attributes: Record<string, string>;
+}
+
 export interface BusinessTypeConfig {
   id: string;
   name: string;
@@ -19,4 +27,5 @@ export interface BusinessTypeConfig {
   productFields: BusinessProductField[];
   categories: string[];
   defaultTheme: BusinessTheme;
+  sampleProducts?: BusinessPreviewProduct[];
 }
